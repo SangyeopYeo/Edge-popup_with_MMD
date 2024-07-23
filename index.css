@@ -1,0 +1,291 @@
+@charset "UTF-8";
+/* CSS Document */
+html {
+    min-height:100%;
+    margin: 0;
+}
+
+
+body {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    
+    font-weight:300;
+    font-size:18px;
+    min-height: 100%;
+    margin: 0;
+    width: 100%;
+}
+section {
+    margin-bottom: 2em;
+}
+
+.wrapper {
+    width:90%;
+    padding-top: 3em;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    /*margin-bottom: 1em; */
+    width:100%;
+    margin-bottom: 1em;
+}
+
+
+
+.overview {
+    width:100%;
+}
+.results{
+    margin:0;
+}
+
+.results table {
+    display: table;
+    table-layout: auto;
+    width:90%;
+    justify-content: center;
+    padding-top: 0;
+    margin-top: 0;
+    margin-bottom: 2em;
+}
+
+
+h1 {
+    font-size:32px;
+    font-weight:300;
+}
+tr.bordered {
+    border-bottom: 1px solid #000 !important;
+}
+
+.disclaimerbox {
+    background-color: #eee;		
+    border: 1px solid #eeeeee;
+    border-radius: 10px ;
+    -moz-border-radius: 10px ;
+    -webkit-border-radius: 10px ;
+    padding: 20px;
+}
+
+video.header-vid {
+    height: 140px;
+    border: 1px solid black;
+    border-radius: 10px ;
+    -moz-border-radius: 10px ;
+    -webkit-border-radius: 10px ;
+}
+
+img.header-img {
+    height: 140px;
+    border: 1px solid black;
+    border-radius: 10px ;
+    -moz-border-radius: 10px ;
+    -webkit-border-radius: 10px ;
+}
+
+img.rounded {
+    border: 1px solid #eeeeee;
+    border-radius: 10px ;
+    -moz-border-radius: 10px ;
+    -webkit-border-radius: 10px ;
+}
+
+a:link,a:visited
+{
+    color: #1367a7;
+    text-decoration: none;
+}
+a:hover {
+    color: #208799;
+}
+
+td.dl-link {
+    height: 160px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.layered-paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+    box-shadow:
+    0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+    5px 5px 0 0px #fff, /* The second layer */
+    5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+    10px 10px 0 0px #fff, /* The third layer */
+    10px 10px 1px 1px rgba(0,0,0,0.35), /* The third layer shadow */
+    15px 15px 0 0px #fff, /* The fourth layer */
+    15px 15px 1px 1px rgba(0,0,0,0.35), /* The fourth layer shadow */
+    20px 20px 0 0px #fff, /* The fifth layer */
+    20px 20px 1px 1px rgba(0,0,0,0.35), /* The fifth layer shadow */
+    25px 25px 0 0px #fff, /* The fifth layer */
+    25px 25px 1px 1px rgba(0,0,0,0.35); /* The fifth layer shadow */
+    margin-left: 10px;
+    margin-right: 45px;
+}
+
+.paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+    box-shadow:
+    0px 0px 1px 1px rgba(0,0,0,0.35); /* The top layer shadow */
+
+    margin-left: 10px;
+    margin-right: 45px;
+}
+
+
+.layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+    box-shadow:
+    0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+    5px 5px 0 0px #fff, /* The second layer */
+    5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+    10px 10px 0 0px #fff, /* The third layer */
+    10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 30px;
+    margin-bottom: 5px;
+}
+
+.vert-cent {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+hr
+{
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+footer > hr
+{
+    border-top: 1px dotted #bbb;
+    background-image: none;
+    background-color: none;
+}
+
+footer > p {
+    font-size: 5px;
+}
+
+.less-weight {
+font-weight: lighter;
+color: black !important;
+}
+.logo {
+    padding: 0px;
+    left: 0;
+    position:static;
+    width: 100%;
+}
+
+
+
+/* 반응형 */
+@media (min-width:320px)  { /* smartphones, iPhone, portrait 480x320 phones */
+.item > span {
+    font-size: 18px !important;
+}
+
+
+.container desc{
+    font-size: 5px !important;
+}
+.wrapper.abs, .results{
+    text-align: justify;
+}
+
+.supple {
+    font-size: 14px;
+}
+
+.supple_img {
+    height:100px !important;
+}
+
+}
+@media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+    .item > span {
+        font-size: 18px !important;
+    }
+    .container.desc > span{
+        font-size: 5px;
+    }
+    .wrapper.abs, .results {
+        text-align: justify;
+    }
+    .supple {
+        font-size: 14px;
+    }
+    .supple_img {
+        height:100px !important;
+    }
+
+ }
+@media (min-width:641px)  { .wrapper.supple {
+    font-size: 18px !important;
+}
+.supple_img {
+    height:175px !important;
+}
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ }
+
+@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ 
+    
+    .overview {
+        width: 950px;
+    }
+
+    .wrapper {
+        width: 960px;
+    }
+    
+    .container {
+        width: 90%;
+    }
+
+    .results table {
+        width: 900px;
+    }
+
+    #paper_and_supple > table {
+        width: 900px;
+    }
+    
+
+}
+@media (min-width:1025px) { 
+    .overview {
+        width: 1000px;
+    }
+
+    .wrapper {
+        width: 1200px;
+    }
+    
+    .container {
+        width: 80%;
+    }/* big landscape tablets, laptops, and desktops */ }
+@media (min-width:1281px) { /* hi-res laptops and desktops */ }
+
+
+#wrap {
+    min-height: 100%;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100px;
+}
+
+footer {
+	width: 100%;
+	height: 100px; /* 내용물에 따라 알맞는 값 설정 */
+	bottom: 0px;
+	position: absolute;
+    color:white;
+    background-image: linear-gradient(90deg, #020024 0%, #090979 35%, #00d4ff 100%);
+}

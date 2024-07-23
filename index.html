@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0">
+
+	<title>Can We Find Strong Lottery Tickets in Generative Models?</title>
+	<link rel="stylesheet" href="index.css">
+	<meta property="og:image" content="Path to my teaser.png"/> <!-- Facebook automatically scrapes this. Go to https://developers.facebook.com/tools/debug/ if you update and want to force Facebook to rescrape. -->
+	<meta property="og:title" content="Can We Find Strong Lottery Tickets in Generative Models?" />
+	<meta property="og:description" content="Paper description." />
+	
+	<!-- Get from Google Analytics -->
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script src="http://www.google.com/jsapi" type="text/javascript"></script> 
+	<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+	<script async src=""></script> 
+	<script src="main.js" ></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-75863369-6');
+	</script>
+</head>
+
+<body>
+
+	<div id="wrap">
+		<section>
+	<center>
+	<div class="wrapper">
+		<span style="font-size:36px;"> Can We Find Strong Lottery Tickets in Generative Models? (AAAI'23)</span>
+			<div class="container" style="margin-top: 2em;" >
+				<div class="item">
+					<span style="font-size:20px"><a href="https://scholar.google.com/citations?hl=ko&user=O5wO-uYAAAAJ">Sangyeop Yeo<sup>1</sup></a></span>
+				</div>
+				<div class="item">
+					<span style="font-size:20px">Yoojin Jang<sup>1</sup></a></span>
+				</div>
+				<div class="item">
+					<span style="font-size:20px"><a href="https://scholar.google.co.kr/citations?hl=en&user=Cs75s1MAAAAJ&view_op=list_works&sortby=pubdate">Jy-yong Sohn<sup>2</sup></a></span>	
+				</div>
+				<div class="item">
+					<span style="font-size:20px"><a href="https://scholar.google.com/citations?user=jcP7m1QAAAAJ&hl=en">Dongyoon Han<sup>3</sup></a></a></span>
+				</div>
+				<div class="item">
+					<span style="font-size:20px"><a href="https://scholar.google.co.kr/citations?hl=en&user=7NBlQw4AAAAJ">Jaejun Yoo<sup>1</sup></a></span>
+				</div>
+			</div>
+
+			<div class="container desc">
+				<div class="item">
+					<span style="font-size:15px"><sup>1</sup>Ulsan National Institute of Science & Technology</span>
+					</div>
+				<div class="item">
+					<span style="font-size:15px"><sup>2</sup>University of Wisconsin-Madison</span>
+				</div>
+				<div class="item">
+					<span style="font-size:15px"><sup>3</sup>NAVER AI Lab</span>
+				</div>
+
+			</div>
+		<div class="container">
+			<div class="item">
+			<span style="font-size:24px"><a href="https://arxiv.org/abs/2212.08311"  target="_blank">[Paper]</a></span>
+		</div>
+		<div class="item">
+			<span style="font-size:24px"><a href="https://youtu.be/8bvk0LzoVB4"  target="_blank">[Video]</a></span>
+		</div>
+		<div class="item">
+			<span style="font-size:24px"><a href="https://drive.google.com/file/d/1DToxSE_wQghAt8XVGITncVBSe8dyyE3K/view?usp=share_link"  target="_blank">[Poster]</a></span>
+		</div>
+		<div class="item">
+			<span style="font-size:24px"><a href="https://github.com/SangyeopYeo/SLT-in-Generative-Models/tree/main">[Github]</a></span>
+		</div>
+		<div class="container">
+				
+		</div>					
+		</div>
+
+</div>
+<div class="overview">
+<img class="round" style="width:90%;" src="./resources/figure2.jpg"/>
+</div>
+	
+<div class="wrapper abs">
+	<hr>
+	<table align=center width=100%;>
+		<center><h1>Abstract</h1></center>
+		<tr>
+			<td>
+				<b>Yes.</b> In this paper, we investigate <i>strong lottery tickets</i> in generative models, the subnetworks that achieve good generative performance
+				 without any weight update. Neural network pruning is considered the main cornerstone of model compression for reducing the costs of computation and memory.
+Unfortunately, pruning a generative model has not been extensively explored, and all existing pruning algorithms suffer from excessive weight-training costs, performance degradation, limited generalizability, or complicated training. To address these problems, we propose to find a strong lottery ticket via moment-matching scores. Our experimental results show that the discovered subnetwork can perform similarly or better than the trained dense model even when only 10% of the weights remain. To the best of our knowledge, we are the first to show the existence of strong lottery tickets in generative models and provide an algorithm to find it stably.
+			</td>
+		</tr>
+	</table>
+</div>
+	<br>
+
+	<hr>
+	
+	<center><h1>Results</h1></center>
+	<div class="results">
+	<table align="center" width=100%; >
+		<td colspan="2"> <p style="word-wrap: break-word;"> The sparsity 
+			<b>"0.k"</b> 
+			means the ratio of remaining weights so if the sparsity is higher, the ratio of remaining weights is higher.</p></td>
+		<tr ></tr>
+		<td colspan="2"><p align="center">GFMN - LSUN Bedroom Dataset</p></td>
+		<tr >
+			<td>
+				<img src="resources/gfmn/sparsity0.1_gfmn.jpg" width="100%;">	
+			</td>
+			<td>
+				<img src="resources/gfmn/fully_trained_gfmn.jpg" width="100%;">
+			</td>
+		</tr>
+		<td colspan="2"><p align="center">BigGAN - CelebA Dataset</p></td>
+		<tr >
+			
+			<td>
+				<img src="resources/biggan/sparsity0.1_biggan.jpg" width="100%">	
+			</td>
+			<td>
+				<img src="resources/biggan/fully_trained_biggan.jpg" width="100%">
+			</td>
+		</tr>
+		<td colspan="2"><p align="center">SNGAN - CelebA Dataset</p></td>
+		<tr>
+			
+			<td>
+				<img src="resources/sngan/sparsity0.1_sngan.jpg" width="100%">	
+			</td>
+			<td>
+				<img src="resources/sngan/fully_trained_sngan.jpg" width="100%">
+			</td>
+		</tr>
+
+	</table>
+</div>
+	
+	<div class="wrapper supple" style="padding-top: 1em;">
+		<hr>
+	<table align=center width=90% >
+		<center><h1>Paper and Supplementary Material</h1></center>
+		<tr>
+			<td><a href="https://arxiv.org/abs/2212.08311" target="_blank"><img class="layered-paper-big supple_img" style="height:175px" src="./resources/paper.png"/></a></td>
+			<td><span >Sangyeop Yeo, Yoojin Jang, Jy-yong Sohn, Dongyoon Han, Jaejun Yoo.<br>
+				<b>Can We Find Strong Lottery Tickets in Generative Models?</b><br>
+				AAAI 2023 Accepted<br>
+				 Arxiv
+				 [<a href="https://arxiv.org/abs/2212.08311" target="_blank">Link</a>] <!-- (<a href="./resources/camera-ready.pdf">camera ready</a>)<br> -->
+				<span style="font-size:4pt"><a href=""><br></a>
+				</span>
+			</td>
+		</tr>
+	</table>
+
+
+	<!--<table align=center width=600px>
+		<tr>
+			<td><span style="font-size:14pt"><center>
+				<a href="./resources/bibtex.txt">[Bibtex]</a>
+			</center></td>
+		</tr>
+	</table>
+-->
+<br>
+<br>
+	<hr>
+
+	<table align=center width=90%>
+		<tr>
+			<td width=400px>
+				<left>
+					<center><h1>Acknowledgements</h1></center>
+					This work was supported by the National Research Foundation of Korea (NRF) grant funded by the Korea government (MSIT) (No. 2.220574.01), 
+					Institute of Information & communications Technology Planning &
+					 Evaluation (IITP) grant funded by the Korea government (MSIT) 
+					 (No.2020-0-01336, Artificial Intelligence Graduate School Program (UNIST)),
+					  and Institue of Information & communications Technology Planning &
+					   Evaluation (IITP) grant funded by the Korea government (MSIT) (No.2022-0-00959, 
+					   (Part 2) Few-Shot Learning of Causal Inference in Vision and Language for Decision Making).
+					And This template was originally made by <a href="http://web.mit.edu/phillipi/">Phillip Isola</a> and <a href="http://richzhang.github.io/">Richard Zhang</a> for a <a href="http://richzhang.github.io/colorization/">colorful</a> ECCV project; the code can be found <a href="https://github.com/richzhang/webpage-template">here</a>.
+				</left>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</section>
+<footer>
+
+<center>
+	<p style="color: white; ">Lab. of Advanced Imaging Tech</p>
+
+		<a style="width: fit-content" href="https://sites.google.com/view/jaejunyoo"><img style="display:block; margin: 0;" 
+		src="resources/others/logo_lait.png" width="50px"></a>
+	</center>
+	</footer>
+</div>
+
+</body>
+</html>
+
