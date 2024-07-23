@@ -1,0 +1,120 @@
+#config.yaml
+
+# setting for experiments
+setting:
+  # -----------------------------------
+  # wandb configurations
+  # -----------------------------------
+  project_name: sngan
+
+  # -----------------------------------
+  # save checkpoints
+  # -----------------------------------
+  saveroot: results
+  outf: sngan_imp_0.1 
+  ckpt: 
+
+  numBatchsToSaveModelToNewFile: !!float 5e5 # numBatchsToSaveModelToNewFile - "Number of batches after which the model is saved into a NEW file."
+  numBatchsToSaveModel: !!float 20000 # numBatchsToSaveModel - "Number of epochs after which the model is saved (to the same file)."
+  numBatchsToValid: 500 # numBatchsToValid - 'Number of batches after which the validation is applied'
+
+  saveFeatureExtractor: False # saveFeatureExtractor - "Saves the feature extractor model to directory specified by --outf."
+
+  # -----------------------------------
+  # CUDA setting and total running iteration
+  # -----------------------------------
+  cuda: True # cuda - 'enables cuda'
+  gpunum: 3 # PRIMARY_DEVICE 
+  gpu_device_ids: [0]
+
+  niter: !!float 14e6                       # niter - 'number of generator updates'
+  firstBatchId: 0                           # firstBatchId - 'sequential number to be used in the first batch'
+  manualSeed: 31
+  lr: !!float 5e-5                          # learning rate, origin: 5e-5, stylegan2: 2e-3, adv: 2e-4
+  beta1: !!float 0.5                        # beta1 - 'beta1 for adam optimizer: default=0.5'
+  scheduler: cos # learning rate scheduler - False: not use scheduler / cos: cosine Annealing
+  
+  # -----------------------------------
+  # Dataset Configurations
+  # -----------------------------------
+  dataset:
+    dataset: celeba # celeba, lsun, ffhq, help = 'cifar10 | lsun | imagenet | folder | lfw | mnist | stl10'
+    dataroot: /home/sosick377/datasets/CelebA/
+    imageSize: 64 # help = 'Generated image size'
+    batchSize: 64
+    workers: 20
+    centerCropSize: 0 # centerCropSize - 'Size to use when performing center cropping.'    
+
+  # -----------------------------------
+  # Generator Configurations
+  # -----------------------------------
+  generator:
+    netGType: sngan #resnet / sngan 
+    bias: True 
+    affine: True 
+    channel_multiplier: 1 
+    nz: 128 # nz - 'size of the latent z vector' 
+    
+    modelDir: '' # modelDir - "path to previously trained model (to continue training)"
+    ngf: 64 # ngf - generator channel dcgan default setting이랑 같음.
+    ndf: 64 # ndf - discriminator channel dcgan default setting이랑 같음.
+    
+    notAdaptFilterSize: False   # notAdaptFilterSize - "Does not use a different number of filters for each conv. layer [Resnet generator only]."
+    useConvAtGSkipConn: False  # useConvAtGSkipConn - "For Resnet generator, applies a conv. layer to the input before upsampling in the skip connection."
+
+    
+    eval_freq: 500
+
+    stylegan2:
+      n_mlp: 8
+  discriminator:
+    lr_D: !!float 2e-4
+    
+    
+
+  subnetwork:
+    training: True 
+    algorithm: ep #tr: Training / ep: Edge-popup / global_ep: Global Edge-popup / imp: imp / gm: Gem-Miner 
+    First_freeze: False #First layer freeze 
+    Last_freeze: False #Last layer freeze 
+    FLfreeze: False
+    training_loss: MMD #MMD: Feature matching MMD loss
+    n_critic: 5
+    fine_tuning: False 
+    fine_tune_loss: MMD 
+
+    sparsity: 0.1 #remaining weights 
+    init: Constant #weight initialization, Constant: Kaiming Constant / G_Normal: Gaussian normal / K_Normal: Kaiming normal
+    scale_fan: False 
+    score_init: dense
+    IMP:
+      rewind: 100000
+      prune_Id: 1500000
+      
+
+    Gem-Miner:
+      threshold: 0.5
+      freezing_period: 5
+      project_freq: 100
+      differentiate_clamp: False
+      regularization: L2
+      lmbda: 0.0000005
+
+  classifier:
+    netEncType:
+      - vgg19-pytorch
+
+    numClassesInFtrExt: 1000 # numClassesInFtrExt - "Number of classes in the feature extractor classifier."
+    numLayersToFtrMatching: 16 # numLayersToFtrMatching - 'Number of layers of the encoder/feature extractor used to perform feature matching'
+    mAvrgAlpha: 1.0
+    lrMovAvrg: !!float 1e-5
+    ftrMatchingWithTopLayers: False # ftrMatchingWithTopLayers - "Uses the top <--numLayersToFtrMatching> layers to perform feature matching."
+    
+
+    
+  alpha: 1.0
+  alpha_prime: 1.0
+  
+####################
+  test_num: 10000 # "Number of images for evaluations"
+  
