@@ -68,7 +68,7 @@ def flatten_dict(var_dict, parent_key='', sep='_'):
     items = []
     for key, value in var_dict.items():
         new_key = key if parent_key else key
-        if isinstance(value, collections.MutableMapping):
+        if isinstance(value, collections.abc.MutableMapping):
             items.extend(flatten_dict(value, new_key, sep=sep).items())
         else:
             items.append((new_key, value))
