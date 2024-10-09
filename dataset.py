@@ -17,17 +17,17 @@ from io import BytesIO
 def load_dataset_and_dataloader(opt, eval=False):
     """
     Loading Dataset for training and test(evaluation) datasets
-    opt: parser 
+    opt: parser
     eval: bool  If you set eval to True, You get evaluation dataset.
     Returns:
         dataloader
     """
     # Check some error raises
-    assert opt.test_num > 0, 'The number of image for evaluation should be more than 0'
+    assert opt.test_num > 0, "The number of image for evaluation should be more than 0"
 
     if opt.centerCropSize == 0:
         opt.centerCropSize = opt.imageSize
-    
+
     Dataset_func = dataset_function[opt.dataset]
 
     dataset = Dataset_func(opt, eval=eval)
@@ -42,113 +42,140 @@ def ImageNet(opt, eval):
     opt.nc = 3
 
     if eval:
-        transformations = Normalize_for_Eval(centerCropSize=opt.centerCropSize, imageSize=opt.imageSize)
-        eval_state='test'
+        transformations = Normalize_for_Eval(
+            centerCropSize=opt.centerCropSize, imageSize=opt.imageSize
+        )
+        eval_state = "test"
     else:
-        transformations = Normalize_for_Real(nc=opt.nc, 
-                                            centerCropSize=opt.centerCropSize,
-                                            imageSize=opt.imageSize)
-        
-        eval_state='train'
-    dataset = dset.ImageNet(root=opt.dataroot,
-                transform=transforms.Compose(
-                    transformations),
-                split=eval_state,
-                download=True
-                )
+        transformations = Normalize_for_Real(
+            nc=opt.nc, centerCropSize=opt.centerCropSize, imageSize=opt.imageSize
+        )
+
+        eval_state = "train"
+    dataset = dset.ImageNet(
+        root=opt.dataroot,
+        transform=transforms.Compose(transformations),
+        split=eval_state,
+        download=True,
+    )
     if eval:
         dataset = split_dataset(dataset, opt.test_num, False)
     return dataset
+
 
 def CelebA(opt, eval):
     opt.nc = 3
     if eval:
-        transformations = Normalize_for_Eval(centerCropSize=opt.centerCropSize, imageSize=opt.imageSize)
-        eval_state='test'
+        transformations = Normalize_for_Eval(
+            centerCropSize=opt.centerCropSize, imageSize=opt.imageSize
+        )
+        eval_state = "test"
     else:
-        transformations = Normalize_for_Real(nc=opt.nc, 
-                                            centerCropSize=opt.centerCropSize, 
-                                            imageSize=opt.imageSize)
-        eval_state='train'
-        
-    dataset = CustomCelebADataset(root_dir=opt.dataroot, 
-                                split=eval_state, 
-                                transforms=transforms.Compose(transformations))
+        transformations = Normalize_for_Real(
+            nc=opt.nc, centerCropSize=opt.centerCropSize, imageSize=opt.imageSize
+        )
+        eval_state = "train"
+
+    dataset = CustomCelebADataset(
+        root_dir=opt.dataroot,
+        split=eval_state,
+        transforms=transforms.Compose(transformations),
+    )
 
     if eval:
-        dataset = split_dataset(dataset, opt.test_num, False)                            
+        dataset = split_dataset(dataset, opt.test_num, False)
     return dataset
+
 
 def CIFAR10(opt, eval):
     opt.nc = 3
     if eval:
-        transformations = Normalize_for_Eval(centerCropSize=None, imageSize=opt.imageSize)
-        eval_state=False
+        transformations = Normalize_for_Eval(
+            centerCropSize=None, imageSize=opt.imageSize
+        )
+        eval_state = False
     else:
-        transformations = Normalize_for_Real(nc=opt.nc, 
-                                            centerCropSize=None, 
-                                            imageSize=opt.imageSize)
-        eval_state=True
-    dataset = dset.CIFAR10(root=opt.dataroot, download=True,
-                                   transform=transforms.Compose(
-                                       transformations),
-                                   train=eval_state)
+        transformations = Normalize_for_Real(
+            nc=opt.nc, centerCropSize=None, imageSize=opt.imageSize
+        )
+        eval_state = True
+    dataset = dset.CIFAR10(
+        root=opt.dataroot,
+        download=True,
+        transform=transforms.Compose(transformations),
+        train=eval_state,
+    )
     if eval:
         dataset = split_dataset(dataset, opt.test_num, False)
     return dataset
 
+
 def MNIST(opt, eval):
     opt.nc = 1
-    
+
     if eval:
-        transformations = Normalize_for_Eval(centerCropSize=None, imageSize=opt.imageSize)
-        eval_state=False
+        transformations = Normalize_for_Eval(
+            centerCropSize=None, imageSize=opt.imageSize
+        )
+        eval_state = False
     else:
-        transformations = Normalize_for_Real(nc=opt.nc, 
-                                                centerCropSize=None, 
-                                                imageSize=opt.imageSize)
-        eval_state=True
-    dataset = dset.MNIST(root=opt.dataroot, download=True,
-                                 transform=transforms.Compose(transformations),
-                                 train=eval_state)
+        transformations = Normalize_for_Real(
+            nc=opt.nc, centerCropSize=None, imageSize=opt.imageSize
+        )
+        eval_state = True
+    dataset = dset.MNIST(
+        root=opt.dataroot,
+        download=True,
+        transform=transforms.Compose(transformations),
+        train=eval_state,
+    )
     if eval:
         dataset = split_dataset(dataset, opt.test_num, False)
     return dataset
+
 
 def MultiMNIST(opt, eval):
     opt.nc = 1
     if eval:
-        transformations = Normalize_for_Eval(centerCropSize=None, imageSize=opt.imageSize)
-        path = os.path.join(opt.dataroot, 'test')
+        transformations = Normalize_for_Eval(
+            centerCropSize=None, imageSize=opt.imageSize
+        )
+        path = os.path.join(opt.dataroot, "test")
     else:
-        transformations = Normalize_for_Real(nc=opt.nc, 
-                                                centerCropSize=None, 
-                                                imageSize=opt.imageSize)
-        path = os.path.join(opt.dataroot, 'train')
+        transformations = Normalize_for_Real(
+            nc=opt.nc, centerCropSize=None, imageSize=opt.imageSize
+        )
+        path = os.path.join(opt.dataroot, "train")
 
-    dataset = dset.ImageFolder(root=path,
-                                 transform=transforms.Compose(transformations))
+    dataset = dset.ImageFolder(root=path, transform=transforms.Compose(transformations))
     if eval:
         dataset = split_dataset(dataset, opt.test_num, False)
     return dataset
+
 
 def LSUN_Bedroom(opt, eval):
     opt.nc = 3
     if eval:
-        transformations = Normalize_for_Eval(centerCropSize=opt.centerCropSize, imageSize=opt.imageSize)
+        transformations = Normalize_for_Eval(
+            centerCropSize=opt.centerCropSize, imageSize=opt.imageSize
+        )
     else:
-        transformations = Normalize_for_Real(nc=opt.nc, 
-                                            centerCropSize=opt.centerCropSize,
-                                            imageSize=opt.imageSize)
-    dataset = dset.LSUN(opt.dataroot, classes=['bedroom_train'],
-                            transform=transforms.Compose(transformations))
+        transformations = Normalize_for_Real(
+            nc=opt.nc, centerCropSize=opt.centerCropSize, imageSize=opt.imageSize
+        )
+    dataset = dset.LSUN(
+        opt.dataroot,
+        classes=["bedroom_train"],
+        transform=transforms.Compose(transformations),
+    )
     if eval:
         dataset = split_dataset(dataset, opt.test_num, False)
     else:
-        # Particularly, LSUN Dataset doesn't contain the testset. So We split the trainset into the eval and trainset. 
+        # Particularly, LSUN Dataset doesn't contain the testset. So We split the trainset into the eval and trainset.
         indices = torch.arange(opt.test_num, len(dataset))
         dataset = Subset(dataset, indices)
     return dataset
+
 
 def STL10(opt, eval):
     opt.nc = 3
@@ -158,23 +185,22 @@ def STL10(opt, eval):
 def FFHQ(opt, eval):
     opt.nc = 3
     if eval:
-        transformations = Normalize_for_Eval(centerCropSize=opt.centerCropSize, imageSize=opt.imageSize)
+        transformations = Normalize_for_Eval(
+            centerCropSize=opt.centerCropSize, imageSize=opt.imageSize
+        )
     else:
-        transformations = Normalize_for_Real(nc=opt.nc, 
-                                            centerCropSize=opt.centerCropSize,
-                                            imageSize=opt.imageSize)
+        transformations = Normalize_for_Real(
+            nc=opt.nc, centerCropSize=opt.centerCropSize, imageSize=opt.imageSize
+        )
 
-    dataset = FFHQ_Dataset(opt.dataroot,
-                            transform=transforms.Compose(transformations))
+    dataset = FFHQ_Dataset(opt.dataroot, transform=transforms.Compose(transformations))
     if eval:
         dataset = split_dataset(dataset, opt.test_num, False)
     else:
-        # Particularly, FFHQ Dataset doesn't contain the testset. So We split the trainset into the eval and trainset. 
+        # Particularly, FFHQ Dataset doesn't contain the testset. So We split the trainset into the eval and trainset.
         indices = torch.arange(opt.test_num, len(dataset))
         dataset = Subset(dataset, indices)
     return dataset
-
-
 
 
 #########################################
@@ -197,9 +223,8 @@ def split_dataset(dataset, test_num, random_sample=False):
     dataset = Subset(dataset, indices)
     return dataset
 
-def Normalize_for_Real(nc: int, 
-                        centerCropSize, 
-                        imageSize: int) -> list:
+
+def Normalize_for_Real(nc: int, centerCropSize, imageSize: int) -> list:
     """
     Args:
         nc: int
@@ -209,28 +234,44 @@ def Normalize_for_Real(nc: int,
     transformations = []
     if centerCropSize is not None:
         if centerCropSize > imageSize:
-            transformations.extend([transforms.CenterCrop(centerCropSize),
-                                    transforms.Resize(imageSize), 
-                                    transforms.ToTensor()])
+            transformations.extend(
+                [
+                    transforms.CenterCrop(centerCropSize),
+                    transforms.Resize(imageSize),
+                    transforms.ToTensor(),
+                ]
+            )
         else:
-            transformations.extend([transforms.Resize(imageSize),
-                                    transforms.CenterCrop(centerCropSize), 
-                                    transforms.ToTensor()])
-    
+            transformations.extend(
+                [
+                    transforms.Resize(imageSize),
+                    transforms.CenterCrop(centerCropSize),
+                    transforms.ToTensor(),
+                ]
+            )
+
     else:
-        transformations = [transforms.Resize((imageSize, imageSize)), 
-                            transforms.ToTensor()]
+        transformations = [
+            transforms.Resize((imageSize, imageSize)),
+            transforms.ToTensor(),
+        ]
 
     if nc == 3:
         # ImageNet stat Normalize
-        transformations.extend([transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                                    std=[0.229, 0.224, 0.225])])
-            
+        transformations.extend(
+            [
+                transforms.Normalize(
+                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+                )
+            ]
+        )
+
     elif nc == 1:
         transformations.extend([transforms.Normalize((0.5,), (0.5,))])
     else:
         raise SystemError
     return transformations
+
 
 def Normalize_for_Eval(centerCropSize, imageSize: int) -> list:
     """
@@ -244,41 +285,61 @@ def Normalize_for_Eval(centerCropSize, imageSize: int) -> list:
     transformations = []
     if centerCropSize is not None:
         if centerCropSize > imageSize:
-            transformations.extend([transforms.CenterCrop(centerCropSize),
-                                    transforms.Resize(imageSize), 
-                                    ToOnlyTensor()])
+            transformations.extend(
+                [
+                    transforms.CenterCrop(centerCropSize),
+                    transforms.Resize(imageSize),
+                    ToOnlyTensor(),
+                ]
+            )
         else:
-            transformations.extend([transforms.Resize(imageSize),
-                                    transforms.CenterCrop(centerCropSize), 
-                                    ToOnlyTensor()])
+            transformations.extend(
+                [
+                    transforms.Resize(imageSize),
+                    transforms.CenterCrop(centerCropSize),
+                    ToOnlyTensor(),
+                ]
+            )
     else:
-        transformations.extend([transforms.Resize((imageSize, imageSize)), 
-                                ToOnlyTensor()])
+        transformations.extend(
+            [transforms.Resize((imageSize, imageSize)), ToOnlyTensor()]
+        )
     return transformations
+
 
 def get_dataloader(dataset, eval, workers, batchSize):
     if eval:
-        dataloader = torch.utils.data.DataLoader(dataset, batch_size=batchSize,
-                                                 shuffle=True, num_workers=int(workers))
+        dataloader = torch.utils.data.DataLoader(
+            dataset, batch_size=batchSize, shuffle=True, num_workers=int(workers)
+        )
     else:
-        dataloader = torch.utils.data.DataLoader(dataset, batch_size=batchSize,
-                                                 shuffle=True, num_workers=int(workers))
+        dataloader = torch.utils.data.DataLoader(
+            dataset, batch_size=batchSize, shuffle=True, num_workers=int(workers)
+        )
     return dataloader
 
 
-dataset_function = {'imagenet': ImageNet, 'cifar10':CIFAR10, 'celeba': CelebA, 'multimnist':MultiMNIST, 'mnist':MNIST, 'lsun':LSUN_Bedroom, 'stl10': STL10, 'ffhq':FFHQ}
-
+dataset_function = {
+    "imagenet": ImageNet,
+    "cifar10": CIFAR10,
+    "celeba": CelebA,
+    "multimnist": MultiMNIST,
+    "mnist": MNIST,
+    "lsun": LSUN_Bedroom,
+    "stl10": STL10,
+    "ffhq": FFHQ,
+}
 
 
 #########################################
-#   For Loading Custom CelebA Dataset, You should upload your list_eval_partition.csv is under the root folder.  
+#   For Loading Custom CelebA Dataset, You should upload your list_eval_partition.csv is under the root folder.
 #########################################
 class CustomCelebADataset(Dataset):
     def __init__(self, root_dir, split, transforms=None):
-        self.image_folder = 'img_align_celeba'
+        self.image_folder = "img_align_celeba"
         self.root_dir = root_dir
 
-        self.annotation_file = 'list_eval_partition.csv'
+        self.annotation_file = "list_eval_partition.csv"
         self.transform = transforms
         self.split = split
         split_map = {
@@ -291,8 +352,7 @@ class CustomCelebADataset(Dataset):
 
         df = pd.read_csv(self.root_dir + self.annotation_file)
 
-        self.filename = df.loc[df['partition']
-                               == split_, :].reset_index(drop=True)
+        self.filename = df.loc[df["partition"] == split_, :].reset_index(drop=True)
         self.length = len(self.filename)
 
     def __len__(self):
@@ -300,22 +360,28 @@ class CustomCelebADataset(Dataset):
 
     def __getitem__(self, idx):
         idx = int(idx)
-        img = Image.open(os.path.join(self.root_dir, self.image_folder,
-                         self.filename.iloc[idx, ].values[0])).convert('RGB')
+        img = Image.open(
+            os.path.join(
+                self.root_dir, self.image_folder, self.filename.iloc[idx,].values[0]
+            )
+        ).convert("RGB")
 
         if self.transform is not None:
             img = self.transform(img)
         target = False
         return img, target
 
+
 import numpy as np
+
 try:
     import accimage
 except ImportError:
     accimage = None
 
+
 #########################################
-#   For Normalizing and Quantization Dataset, ToOnlyTensor is standarization. 
+#   For Normalizing and Quantization Dataset, ToOnlyTensor is standarization.
 #########################################
 class ToOnlyTensor(torch.nn.Module):
     def __init__(self):
@@ -349,7 +415,9 @@ class ToOnlyTensor(torch.nn.Module):
 
         # handle PIL Image
         mode_to_nptype = {"I": np.int32, "I;16": np.int16, "F": np.float32}
-        img = torch.from_numpy(np.array(pic, mode_to_nptype.get(pic.mode, np.uint8), copy=True))
+        img = torch.from_numpy(
+            np.array(pic, mode_to_nptype.get(pic.mode, np.uint8), copy=True)
+        )
 
         if pic.mode == "1":
             img = 255 * img
@@ -363,12 +431,12 @@ class ToOnlyTensor(torch.nn.Module):
 
 
 class FFHQ_Dataset(Dataset):
-    '''
+    """
     Usage:
         Self-coded class for loading the FFHQ data
-    '''
+    """
 
-    def __init__(self, image_folder, transform = None):
+    def __init__(self, image_folder, transform=None):
         """
         image_folder: image folder
         transform: transform
@@ -377,7 +445,9 @@ class FFHQ_Dataset(Dataset):
         images_list = []
         for images_file in images_walk:
             images_list = images_list + images_file[2]
-        self.images_list = sorted([os.path.join(image_folder, image) for image in images_list])
+        self.images_list = sorted(
+            [os.path.join(image_folder, image) for image in images_list]
+        )
         self.transform = transform
 
     def __len__(self):
@@ -387,10 +457,10 @@ class FFHQ_Dataset(Dataset):
         img_id = self.images_list[index]
         code = img_id[-9:]
         dir = img_id[:-7]
-        img_dir = dir+"000/"+code
-        img = Image.open(img_dir).convert('RGB')
+        img_dir = dir + "000/" + code
+        img = Image.open(img_dir).convert("RGB")
         if self.transform is not None:
             img = self.transform(img)
-        
+
         target = False
         return img, target

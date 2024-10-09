@@ -13,9 +13,12 @@ def get_parser(config_file_name=""):
     """
     parser = argparse.ArgumentParser()
     # Read configuration file for defaults
-    parser.add_argument('-c', '--config', type=argparse.FileType(mode='r'), default=config_file_name)
-    parser.add_argument('-s1', '--setting', default='setting')
+    parser.add_argument(
+        "-c", "--config", type=argparse.FileType(mode="r"), default=config_file_name
+    )
+    parser.add_argument("-s1", "--setting", default="setting")
     return parser
+
 
 def get_args(parser):
     """
@@ -33,10 +36,14 @@ def get_args(parser):
         args = parser.parse_args()
     return args
 
+
 def get_args_to_parser(yaml_dict, parser):
     # Unroll what's inside the yaml
-    opt_args = [['--' + key] for key, _ in yaml_dict.items()]
-    opt_kwargs = [{'dest': key, 'type': type(value), 'default': value} for key, value in yaml_dict.items()]
+    opt_args = [["--" + key] for key, _ in yaml_dict.items()]
+    opt_kwargs = [
+        {"dest": key, "type": type(value), "default": value}
+        for key, value in yaml_dict.items()
+    ]
     # Put the unrolled arguments into parser
     for p_args, p_kwargs in zip(opt_args, opt_kwargs):
         parser.add_argument(*p_args, **p_kwargs)
@@ -45,10 +52,10 @@ def get_args_to_parser(yaml_dict, parser):
 
 def get_sum_dict(yaml_dict, yaml_key):
     """
-    Get the merged dictionary from each sepearated dictionary files. 
+    Get the merged dictionary from each sepearated dictionary files.
     :yaml_dict: total_yaml_file
     """
-    #assert yaml_key[0] == 'default', 'You should set the first dictionary is default setting'
+    # assert yaml_key[0] == 'default', 'You should set the first dictionary is default setting'
 
     set_dict = {}
     for key in yaml_key:
@@ -56,8 +63,9 @@ def get_sum_dict(yaml_dict, yaml_key):
         set_dict = dict(set_dict, **flatten_dict(yaml_dict[key]))
     return set_dict
 
+
 # Adapted from https://stackoverflow.com/questions/6027558/flatten-nested-python-dictionaries-compressing-keys
-def flatten_dict(var_dict, parent_key='', sep='_'):
+def flatten_dict(var_dict, parent_key="", sep="_"):
     """
     A recursive function to flatten out the dictionary.
     :param var_dict: the nested dictionary you want to flatten
@@ -75,7 +83,7 @@ def flatten_dict(var_dict, parent_key='', sep='_'):
     return dict(items)
 
 
-def load_parser(config_file = "config/config.yaml"):
+def load_parser(config_file="config/config.yaml"):
     """Call this function to load parser"""
     parser = get_parser(config_file)
     args = get_args(parser)

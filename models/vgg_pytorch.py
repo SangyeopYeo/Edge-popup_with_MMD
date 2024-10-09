@@ -8,6 +8,7 @@ import numpy as np
 
 
 from utils.util import getNetImageSizeAndNumFeats
+
 logger = logging.getLogger(__name__)
 
 __all__ = [
@@ -23,7 +24,12 @@ model_urls = {
 
 class VGG(nn.Module):
     def __init__(
-        self, features: nn.Module, num_classes: int = 1000, init_weights: bool = True, dropout: float = 0.5, get_perceptual_feats: bool = True,
+        self,
+        features: nn.Module,
+        num_classes: int = 1000,
+        init_weights: bool = True,
+        dropout: float = 0.5,
+        get_perceptual_feats: bool = True,
         **kwargs
     ) -> None:
         super().__init__()
@@ -31,12 +37,11 @@ class VGG(nn.Module):
         self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
 
         self.classifier = self._make_classifier(num_classes, init_weights, dropout)
-        
+
         if init_weights:
             self._initialize_weights()
         self.get_perceptual_feats = get_perceptual_feats
         self.Out = OrderedDict()
-        
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.features(x)
@@ -53,9 +58,9 @@ class VGG(nn.Module):
         else:
             return out
 
-    def _make_classifier(self, num_classes, init_weights, dropout):        
+    def _make_classifier(self, num_classes, init_weights, dropout):
         classify = nn.Sequential(
-            nn.Linear(512 * 7 * 7, 4096), # 512, 7, 7, 4096
+            nn.Linear(512 * 7 * 7, 4096),  # 512, 7, 7, 4096
             nn.ReLU(True),
             nn.Dropout(p=dropout),
             nn.Linear(4096, 4096),
@@ -68,8 +73,7 @@ class VGG(nn.Module):
     def _initialize_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(
-                    m.weight, mode="fan_out", nonlinearity="relu")
+                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.BatchNorm2d):
@@ -81,8 +85,10 @@ class VGG(nn.Module):
 
     def _get_hook(self, layer_num):
         Out = self.Out
+
         def myhook(module, _input, _out):
             Out[layer_num] = _out
+
         self.features[layer_num].register_forward_hook(myhook)
 
 
@@ -104,21 +110,49 @@ def make_layers(cfg: List[Union[str, int]], batch_norm: bool = False) -> nn.Sequ
 
 
 cfgs: Dict[str, List[Union[str, int]]] = {
-    "E": [64, 64, "M", 128, 128, "M", 256, 256, 256, 256, "M", 512, 512, 512, 512, "M", 512, 512, 512, 512, "M"]
+    "E": [
+        64,
+        64,
+        "M",
+        128,
+        128,
+        "M",
+        256,
+        256,
+        256,
+        256,
+        "M",
+        512,
+        512,
+        512,
+        512,
+        "M",
+        512,
+        512,
+        512,
+        512,
+        "M",
+    ]
 }
 
 
-def _vgg(arch: str, cfg: str, batch_norm: bool, pretrained: bool, progress: bool, **kwargs: Any) -> VGG:
+def _vgg(
+    arch: str,
+    cfg: str,
+    batch_norm: bool,
+    pretrained: bool,
+    progress: bool,
+    **kwargs: Any
+) -> VGG:
     if pretrained:
         kwargs["init_weights"] = False
     model = VGG(make_layers(cfgs[cfg], batch_norm=batch_norm), **kwargs)
     if pretrained:
         state_dict = torch.hub.load_state_dict_from_url(
-            model_urls[arch], progress=progress)
+            model_urls[arch], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
-
-
 
 
 def vgg19_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
@@ -133,26 +167,34 @@ def vgg19_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     return _vgg("vgg19_bn", "E", True, pretrained, progress, **kwargs)
 
 
-def VGG19(net_type='vgg19', get_perceptual_feats=True, num_classes=10, image_size=32, **kwargs):
-    logger.info("buildVGGNet: {} {} {} {}".format(
-        net_type, get_perceptual_feats, num_classes, image_size))
+def VGG19(
+    net_type="vgg19", get_perceptual_feats=True, num_classes=10, image_size=32, **kwargs
+):
+    logger.info(
+        "buildVGGNet: {} {} {} {}".format(
+            net_type, get_perceptual_feats, num_classes, image_size
+        )
+    )
 
-    net = vgg19_bn(pretrained=True,
-            progress=True,
-            get_perceptual_feats=get_perceptual_feats,
-            num_classes=num_classes,
-            **kwargs)
-    
+    net = vgg19_bn(
+        pretrained=True,
+        progress=True,
+        get_perceptual_feats=get_perceptual_feats,
+        num_classes=num_classes,
+        **kwargs
+    )
 
     logger.info("# net : {} {}".format(len(net.features), net))
     if get_perceptual_feats:
         for idx in range(len(net.features)):
-            if str(net.features[idx])[0:4] == 'ReLU':
-                logger.info("# registering hook module ({}), {}".format(
-                    idx, str(net.features[idx])))
+            if str(net.features[idx])[0:4] == "ReLU":
+                logger.info(
+                    "# registering hook module ({}), {}".format(
+                        idx, str(net.features[idx])
+                    )
+                )
                 net._get_hook(idx)
-        ImgSizeL, numFeatsL = getNetImageSizeAndNumFeats(
-            net, image_size=image_size)
+        ImgSizeL, numFeatsL = getNetImageSizeAndNumFeats(net, image_size=image_size)
 
         net.ImageSizePerLayer = np.array(ImgSizeL)
         net.numberOfFeaturesPerLayer = np.array(numFeatsL)
