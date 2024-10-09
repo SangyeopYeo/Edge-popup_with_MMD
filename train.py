@@ -387,13 +387,13 @@ def mmdtrain(opt, log, netG, curNetEnc, netMean, netVar, optimizerG, optimizerMe
             fake = netG(fixed_noise).detach()
             vutils.save_image(fake.data[:min(64, opt.batchSize)], '%s/%s/%s/fake_samples_iterId_%04d.png' % (
                                                 opt.saveroot, opt.outf,  'images', fileSuffix), nrow = int(8),
-                                                normalize=True, range=None)
+                                                normalize=True, value_range=None)
             del fake
 
             fake_va = netG(noisev).detach()
             vutils.save_image(fake_va.data[:min(64, opt.batchSize)], '%s/%s/%s/fake_samples_iterId_%04d.png' % (
                                                 opt.saveroot, opt.outf,  'images_va', fileSuffix), nrow = int(8),
-                                                normalize=True, range=None)
+                                                normalize=True, value_range=None)
             del fake_va
 
 
